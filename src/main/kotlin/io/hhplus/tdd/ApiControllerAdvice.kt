@@ -14,6 +14,14 @@ data class ErrorResponse(val code: String, val message: String)
 class ApiControllerAdvice : ResponseEntityExceptionHandler() {
     private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
+        return ResponseEntity(
+            ErrorResponse("400", "${e.message}"),
+            HttpStatus.BAD_REQUEST,
+        )
+    }
+
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         return ResponseEntity(
