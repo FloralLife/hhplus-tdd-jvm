@@ -22,7 +22,7 @@ class PointController(
     @GetMapping("{id}")
     fun point(
         @PathVariable id: Long,
-    ): UserPoint = UserPoint(0, 0, 0)
+    ): UserPoint = pointService.getUserPoint(id)
 
     /**
      * TODO - 특정 유저의 포인트 충전/이용 내역을 조회하는 기능을 작성해주세요.
@@ -30,7 +30,7 @@ class PointController(
     @GetMapping("{id}/histories")
     fun history(
         @PathVariable id: Long,
-    ): List<PointHistory> = emptyList()
+    ): List<PointHistory> = pointService.getPointHistory(id)
 
     /**
      * TODO - 특정 유저의 포인트를 충전하는 기능을 작성해주세요.
@@ -39,7 +39,10 @@ class PointController(
     fun charge(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint = UserPoint(0, 0, 0)
+    ): UserPoint {
+        require(amount >= 0) { "amount 는 음수일 수 없습니다." }
+        return pointService.chargePoint(id, amount)
+    }
 
     /**
      * TODO - 특정 유저의 포인트를 사용하는 기능을 작성해주세요.
@@ -48,5 +51,8 @@ class PointController(
     fun use(
         @PathVariable id: Long,
         @RequestBody amount: Long,
-    ): UserPoint = UserPoint(0, 0, 0)
+    ): UserPoint {
+        require(amount >= 0) { "amount 는 음수일 수 없습니다." }
+        return pointService.usePoint(id, amount)
+    }
 }
